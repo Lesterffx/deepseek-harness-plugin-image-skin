@@ -1,0 +1,28 @@
+{
+  "name": "deepseek-harness-plugin-image-skin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Turn any image into an installable DeepSeek Harness Web skin plugin.",
+  "scripts": {
+    "start": "node server.mjs",
+    "check": "node --check server.mjs && node --check public/app.js"
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lesterffx/deepseek-harness-plugin-image-skin.git"
+  },
+  "homepage": "https://github.com/Lesterffx/deepseek-harness-plugin-image-skin#readme",
+  "keywords": [
+    "deepseek",
+    "deepseek-harness",
+    "plugin",
+    "theme",
+    "web-ui"
+  ],
+  "author": "赋范空间",
+  "license": "MIT"
+}

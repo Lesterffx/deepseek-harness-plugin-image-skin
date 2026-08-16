@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harness Skin Studio</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32"><path d="M7 8.5 16 4l9 4.5v10L16 28l-9-4.5v-15Z"/><path d="m11 11 5-2.5 5 2.5v5.5L16 19l-5-2.5V11Z"/></svg>
+          </div>
+          <div>
+            <strong>Harness Skin Studio</strong>
+            <span>单图生成 Web 换肤插件</span>
+          </div>
+        </div>
+        <div class="topbar-meta">
+          <span class="official-badge"><i></i> 官方扩展点</span>
+          <span class="runtime-status" id="runtimeStatus">正在连接本地生成器…</span>
+        </div>
+      </header>
+
+      <section class="intro-row">
+        <div>
+          <p class="eyebrow">IMAGE → PLUGIN → HARNESS</p>
+          <h1>给一张图，生成可安装的 Harness 皮肤插件</h1>
+        </div>
+        <p class="intro-copy">自动完成 16:9 适配、配色提取、主题变量生成和 Bundle 打包，不修改 Harness 源码。</p>
+      </section>
+
+      <ol class="steps" aria-label="生成步骤">
+        <li class="step is-ready" data-step="1"><span>1</span><div><b>选择图片</b><small>读取真实文件</small></div></li>
+        <li class="step" data-step="2"><span>2</span><div><b>适配画幅</b><small>1920 × 1080</small></div></li>
+        <li class="step" data-step="3"><span>3</span><div><b>提取配色</b><small>生成明暗主题</small></div></li>
+        <li class="step" data-step="4"><span>4</span><div><b>生成插件</b><small>Client Module</small></div></li>
+        <li class="step" data-step="5"><span>5</span><div><b>打包安装</b><small>Harness Bundle</small></div></li>
+      </ol>
+
+      <main class="workspace">
+        <section class="panel source-panel">
+          <div class="panel-heading">
+            <div><span class="index">01</span><h2>选择原图</h2></div>
+            <span class="chip">PNG / JPG / WEBP</span>
+          </div>
+
+          <label class="dropzone" id="dropzone" for="imageInput">
+            <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp">
+            <div class="drop-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg>
+            </div>
+            <strong id="dropTitle">拖入一张图片</strong>
+            <span id="dropHint">或点击选择本地文件</span>
+            <div class="file-card" id="fileCard" hidden>
+              <div class="file-thumb" id="fileThumb"></div>
+              <div><b id="fileName">—</b><small id="fileMeta">—</small></div>
+              <em>已读取</em>
+            </div>
+          </label>
+
+          <div class="control-group">
+            <div class="control-label"><span>主体纵向位置</span><output id="positionValue">50%</output></div>
+            <input id="positionRange" type="range" min="0" max="100" value="50">
+            <div class="range-labels"><span>靠上</span><span>居中</span><span>靠下</span></div>
+          </div>
+
+          <div class="control-group">
+            <div class="control-label"><span>界面玻璃层</span><output id="glassValue">72%</output></div>
+            <input id="glassRange" type="range" min="35" max="92" value="72">
+            <div class="range-labels"><span>通透</span><span>平衡</span><span>清晰</span></div>
+          </div>
+
+          <button class="primary-button" id="generateButton" disabled>
+            <svg viewBox="0 0 24 24"><path d="m12 3 1.4 4.3L18 9l-4.6 1.7L12 15l-1.4-4.3L6 9l4.6-1.7L12 3Z"/><path d="m18.5 15 .8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2Z"/></svg>
+            <span>生成 Harness 皮肤插件</span>
+          </button>
+        </section>
+
+        <section class="panel crop-panel">
+          <div class="panel-heading">
+            <div><span class="index">02</span><h2>16:9 画幅与配色</h2></div>
+            <span class="chip blue">实时处理</span>
+          </div>
+          <div class="canvas-wrap" id="canvasWrap">
+            <canvas id="previewCanvas" width="960" height="540"></canvas>
+            <div class="canvas-empty" id="canvasEmpty">
+              <svg viewBox="0 0 32 32"><rect x="4" y="6" width="24" height="20" rx="3"/><path d="m7 22 6-6 4 4 3-3 5 5M21 12h.01"/></svg>
+              <strong>原图会在这里自动适配为 16:9</strong>
+              <span>只裁切画幅，不修改原始文件</span>
+            </div>
+            <span class="format-badge">1920 × 1080</span>
+            <div class="focus-line"><i></i><span>主体焦点</span></div>
+          </div>
+          <div class="palette-card">
+            <div><strong>从图片提取的主题色</strong><span>同时生成浅色与深色可读性方案</span></div>
+            <div class="swatches" id="swatches">
+              <span style="--color:#3f7ca5"></span><span style="--color:#162636"></span><span style="--color:#a9cde3"></span><span style="--color:#6da9cd"></span>
+            </div>
+          </div>
+          <div class="contract-row">
+            <div><i>18</i><span>主题变量</span></div>
+            <div><i>2</i><span>明暗模式</span></div>
+            <div><i>0</i><span>宿主源码改动</span></div>
+          </div>
+        </section>
+
+        <section class="panel preview-panel">
+          <div class="panel-heading">
+            <div><span class="index">03</span><h2>Harness 实时预览</h2></div>
+            <div class="theme-toggle" role="group" aria-label="预览模式">
+              <button class="is-active" data-theme="light">浅色</button><button data-theme="dark">深色</button>
+            </div>
+          </div>
+
+          <div class="harness-preview is-light" id="harnessPreview">
+            <aside>
+              <div class="mini-logo"><span></span><b>deepseek</b></div>
+              <button class="new-task">＋ 新建任务</button>
+              <small>工作区</small>
+              <a class="active"><i></i>Harness Skin Studio</a>
+              <a><i></i>插件开发教程</a>
+              <div class="aside-bottom"><span>九天老师</span><b>⌄</b></div>
+            </aside>
+            <div class="preview-main">
+              <div class="preview-top"><span>Harness Skin Studio</span><div>⌘ K　⚙</div></div>
+              <div class="preview-hero">
+                <div class="spark">✦</div>
+                <h3>今天想和 Harness 一起完成什么？</h3>
+                <p>皮肤插件已经接管主题变量与背景层</p>
+                <div class="composer">
+                  <span>输入任务，或使用 @ 引用文件</span>
+                  <div><b>Agent</b><button>↑</button></div>
+                </div>
+              </div>
+            </div>
+            <div class="preview-placeholder" id="previewPlaceholder"><span>选择图片后实时换肤</span></div>
+          </div>
+
+          <div class="result-card" id="resultCard">
+            <div class="result-icon">✓</div>
+            <div class="result-copy"><strong id="resultTitle">等待生成</strong><span id="resultPath">完成后会得到源码目录与 .tgz 安装包</span></div>
+            <button id="copyButton" disabled>复制命令</button>
+          </div>
+          <div class="result-actions">
+            <button class="secondary-button" id="installButton" disabled>安装到演示 Harness</button>
+            <a class="secondary-button link-button" id="openHarnessButton" href="http://127.0.0.1:3098" target="_blank" rel="noreferrer">打开 Harness</a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="statusbar">
+        <div class="status-log"><span class="status-dot"></span><strong id="statusTitle">准备就绪</strong><p id="statusDetail">请选择一张图片，所有处理都在本机完成。</p></div>
+        <div class="api-flow"><span>Client Module</span><i>→</i><span>ThemeRuntime</span><i>→</i><span>Bundle Profile</span></div>
+      </footer>
+    </div>
+    <canvas id="renderCanvas" width="1920" height="1080" hidden></canvas>
+    <div class="toast" id="toast" role="status"></div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

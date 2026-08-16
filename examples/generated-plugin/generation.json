@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2026-08-14T01:10:05.473Z",
+  "package": "harness-image-skin@1.0.0",
+  "sourceFile": "冰蓝布偶猫.png",
+  "renderedImageSha256": "53f27b77f7994e7263be5f973fef16e64b61e6c3af3d9157c56a2ed58cd6dff7",
+  "sourceWidth": 1672,
+  "sourceHeight": 941,
+  "outputWidth": 1920,
+  "outputHeight": 1080,
+  "backgroundPositionY": 50,
+  "glassStrength": 72,
+  "palette": [
+    "#3b5891",
+    "#1d2739",
+    "#b0c7e8",
+    "#7091cc"
+  ]
+}
